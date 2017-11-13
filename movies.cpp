@@ -69,8 +69,8 @@ string recupInt(string imdbapi, int & i)
 		else
 		{	
 			value += imdbapi.at(i);
-			++i;
 		}
+		++i;
 	}
 
 	if (value == "" || value == "N/A")
@@ -94,7 +94,10 @@ string recupDollar(string imdbapi, int & i)
 		{
 			//Ne rien faire
 		}
-		value += imdbapi.at(i);
+		else
+		{
+			value += imdbapi.at(i);
+		}
 		++i;
 	}
 
@@ -116,7 +119,10 @@ string recupDate(string imdbapi, int & i)
 		{
 			value += "-";
 		}
-		value += imdbapi.at(i);
+		else
+		{
+			value += imdbapi.at(i);
+		}
 		++i;
 	}
 
@@ -263,13 +269,11 @@ int main(int argc, char const *argv[])
 		insertion += ',';
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\n')
+			if(caractere == '\r')
 			{
-				//insertion = insertion.substr(0, insertion.size()-1);
-				ecriture << insertion;
-
+				lecture.get(caractere); // saut \n			
+			
 				ecriture << insertion << "\',";
-
 
 				URL = "http://www.omdbapi.com/?apikey=b67cd4fd&i=tt";
 				URL += imdbid(lecture2);
