@@ -66,6 +66,34 @@ string recupInt(string imdbapi, int & i)
 		{
 			//Ne rien faire
 		}
+		else
+		{	
+			value += imdbapi.at(i);
+			++i;
+		}
+	}
+
+	if (value == "" || value == "N/A")
+	{
+		value = "null";
+	}
+
+	return value;
+}
+
+string recupDollar(string imdbapi, int & i)
+{
+	string value = "";
+	if(imdbapi.at(i) == '$')
+	{
+		++i;
+	}
+	while(imdbapi.at(i) != '\"')
+	{
+		if(imdbapi.at(i) == ',')
+		{
+			//Ne rien faire
+		}
 		value += imdbapi.at(i);
 		++i;
 	}
@@ -84,7 +112,7 @@ string recupDate(string imdbapi, int & i)
 	while(imdbapi.at(i) != '\"')
 	{
 		
-		if(imdbapi.at(i) == '\s')
+		if(imdbapi.at(i) == ' ')
 		{
 			value += "-";
 		}
@@ -98,7 +126,7 @@ string recupDate(string imdbapi, int & i)
 	}
 	else
 	{ 
-		value += "\', \'DD-Mon-YY\')"
+		value += "\', \'DD-Mon-YY\')";
 	}
 
 	return value;
@@ -140,10 +168,10 @@ string extraction(string imdbapi)
 			} 
 			else if(key == "Runtime")
 			{
-				
-				tmp = recupInt(imdbapi, i)
+				string tmp;
+				tmp = recupInt(imdbapi, i);
 				donnee += tmp.substr(0, tmp.size()-4);
-				donnee += "\',";
+				donnee += ",";
 			} 
 			else if(key == "Director")
 			{
@@ -175,7 +203,7 @@ string extraction(string imdbapi)
 				donnee += recupInt(imdbapi, i);
 				donnee += ",";
 			} 
-			else if(key == "imdbrating")
+			else if(key == "imdbRating")
 			{				
 				donnee += recupInt(imdbapi, i);
 				donnee += ",";
@@ -192,7 +220,7 @@ string extraction(string imdbapi)
 			} 
 			else if(key == "BoxOffice")
 			{
-				donnee += recupString(imdbapi, i);
+				donnee += recupDollar(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Production")
@@ -212,7 +240,6 @@ int main(int argc, char const *argv[])
 	CURLcode res;
 	std::string readBuffer, URL;
 
-
 	ifstream lecture(argv[1], ios::in);
 	ifstream lecture2(argv[2], ios::in);
 	ofstream ecriture(argv[3], ios::out | ios::trunc);
@@ -230,7 +257,8 @@ int main(int argc, char const *argv[])
 		lecture.get(caractere);
 		while(caractere != ',')
 		{
-				insertion += caractere;
+			insertion += caractere;
+			lecture.get(caractere);
 		}
 		insertion += ',';
 		while(lecture.get(caractere))
