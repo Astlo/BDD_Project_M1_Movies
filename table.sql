@@ -1,24 +1,9 @@
-=======
 -- @table.sql
-
 
 prompt *************************************************************
 prompt ******************** DROP TABLE *****************************
 prompt *************************************************************
 
-DROP TABLE Table_Faits CASCADE CONSTRAINTS;
-DROP TABLE Temps CASCADE CONSTRAINTS;
-DROP TABLE Tags CASCADE CONSTRAINTS;
-DROP TABLE Movies CASCADE CONSTRAINTS;
-
-prompt ************************************************************
-prompt *********************** CREATE TABLE ***********************
-prompt ************************************************************
-
-prompt
-prompt ************************** Movies **************************
-prompt
-=======
 DROP TABLE Movies CASCADE CONSTRAINT;
 DROP TABLE Tag CASCADE CONSTRAINT;
 DROP TABLE Temps CASCADE CONSTRAINT;
@@ -41,17 +26,17 @@ CREATE TABLE Movies
 	movieRated VARCHAR(20),
 	movieReleased DATE,
 	movieRuntime NUMBER,
-	movieDirector VARCHAR2(40),
+	movieDirector VARCHAR2(100),
 	movieActors VARCHAR2(200),
-	movieLanguage VARCHAR2(40),
+	movieLanguage VARCHAR2(100),
 	movieCountry VARCHAR2(200),
-	movieAwards VARCHAR2(40),
+	movieAwards VARCHAR2(100),
 	movieMetascore NUMBER,
 	movieImdbRating NUMBER,
 	movieImdbVotes NUMBER,
 	movieDVD DATE,
 	movieBoxOffice NUMBER,
-	movieProduction VARCHAR2(40),
+	movieProduction VARCHAR2(100),
 	PRIMARY KEY (movieId),
 	CONSTRAINT check_Movies_movieId CHECK (movieId >= 0),
 	CONSTRAINT check_Movies_movieYear CHECK (movieYear >= 1888),
@@ -90,11 +75,6 @@ CREATE TABLE Rating
 );
 
 prompt
-prompt *************************** Tags ***************************
-prompt
-
-CREATE TABLE Tags
-=======
 prompt ******************** Fait : Tagging ***************************
 
 CREATE TABLE Tagging
@@ -104,7 +84,7 @@ CREATE TABLE Tagging
 	userTag VARCHAR2(200) NOT NULL,
 	colonne_timestamp NUMBER NOT NULL,
 	relevance NUMBER NOT NULL,
-	PRIMARY KEY (userId, movieId, colonne_timestamp),
+	PRIMARY KEY (userId, movieId, userTag),
 	CONSTRAINT fk_Tagging_movieId FOREIGN KEY (movieId) REFERENCES Movies(movieId),
 	CONSTRAINT fk_Tagging_colonne_timestamp FOREIGN KEY (colonne_timestamp) REFERENCES Temps(colonne_timestamp)
 );

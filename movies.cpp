@@ -42,15 +42,24 @@ string recupString(string imdbapi, int & i)
 	{
 		if(imdbapi.at(i) == '\'')
 		{
-			value += "\\";
+			value += " ";
+			++i;
 		}
-		value += imdbapi.at(i);
-		++i;
+		else if(imdbapi.at(i) == '&')
+		{
+			value += "and";
+			++i;
+		}
+		else
+		{
+			value += imdbapi.at(i);
+			++i;	
+		}
 	}
 
 	if (value == "" || value == "N/A")
 	{
-		value = "null";
+		value = "NULL";
 	}
 	else
 	{
@@ -78,7 +87,7 @@ string recupInt(string imdbapi, int & i)
 
 	if (value == "" || value == "N/A")
 	{
-		value = "null";
+		value = "NULL";
 	}
 
 	return value;
@@ -106,7 +115,7 @@ string recupDollar(string imdbapi, int & i)
 
 	if (value == "" || value == "N/A")
 	{
-		value = "null";
+		value = "NULL";
 	}
 
 	return value;
@@ -129,9 +138,9 @@ string recupDate(string imdbapi, int & i)
 		++i;
 	}
 
-	if (value == "to_date(\'" || value == "N/A")
+	if (value == "to_date(\'" || value == "to_date(\'N/A")
 	{
-		value = "null";
+		value = "NULL";
 	}
 	else
 	{ 
@@ -179,7 +188,14 @@ string extraction(string imdbapi)
 			{
 				string tmp;
 				tmp = recupInt(imdbapi, i);
-				donnee += tmp.substr(0, tmp.size()-4);
+				if(tmp != "NULL")
+				{
+					donnee += tmp.substr(0, tmp.size()-4);
+				}
+				else
+				{
+					donnee += "NULL";
+				}
 				donnee += ",";
 			} 
 			else if(key == "Director")
@@ -253,7 +269,7 @@ int main(int argc, char const *argv[])
 	ifstream lecture2(argv[2], ios::in);
 	ofstream ecriture(argv[3], ios::out | ios::trunc);
 
-	string insert  = "INSERT INTO Movies Values(\'";
+	string insert  = "INSERT INTO Movies Values(";
 	char caractere;
 	
 	if(lecture && lecture2 && ecriture)
@@ -270,13 +286,14 @@ int main(int argc, char const *argv[])
 			lecture.get(caractere);
 		}
 		insertion += ',';
+		insertion += '\'';
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\n')	//Si one saut de ligne est \n
-			{
-				//if(caractere == '\r') //Si one saut de ligne est \r\n
-				//{
-				//lecture.get(caractere); // saut \n			
+			//if(caractere == '\n')	//Si one saut de ligne est \n
+			//{
+				if(caractere == '\r') //Si one saut de ligne est \r\n
+				{
+				lecture.get(caractere); // saut \n			
 			
 				ecriture << insertion << "\',";
 
@@ -296,7 +313,15 @@ int main(int argc, char const *argv[])
 
 				insertion = "";
 				ecriture << ");" << "\n";
-				insertion += insert;
+				insertion += insert;lecture.get(caractere);
+				while(caractere != ',')
+				{
+					insertion += caractere;
+					lecture.get(caractere);
+				}
+				insertion += ',';
+				insertion += '\'';
+
 			} 
 			else if(caractere == '\"')
 			{
@@ -305,8 +330,11 @@ int main(int argc, char const *argv[])
 				{
 					if(caractere == '\'')
 					{
-						insertion += '\\';
-						insertion += caractere;
+						insertion += ' ';
+					}
+					else if(caractere == '&')
+					{
+						insertion += "and";
 					}
 					else
 					{
@@ -322,8 +350,11 @@ int main(int argc, char const *argv[])
 			}
 			else if(caractere == '\'')
 			{
-				insertion += '\\';
-				insertion += caractere;
+				insertion += ' ';
+			}
+			else if(caractere == '&')
+			{
+				insertion += "and";
 			}
 			else
 			{
