@@ -1,4 +1,4 @@
--- @tables.sql
+-- @table.sql
 
 prompt *************************************************************
 prompt ******************** DROP TABLE *****************************
@@ -84,7 +84,7 @@ CREATE TABLE Tagging
 	userTag VARCHAR2(200) NOT NULL,
 	colonne_timestamp TIMESTAMP NOT NULL,
 	relevance NUMBER NOT NULL,
-	PRIMARY KEY (userId, movieId, userTag),
+	PRIMARY KEY (userId, movieId, colonne_timestamp),
 	CONSTRAINT fk_Tagging_movieId FOREIGN KEY (movieId) REFERENCES Movies(movieId),
 	CONSTRAINT fk_Tagging_colonne_timestamp FOREIGN KEY (colonne_timestamp) REFERENCES Temps(colonne_timestamp)
 );
