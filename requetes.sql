@@ -12,10 +12,10 @@ FROM Movies
 GROUP BY CUBE (movieDVD,movieCountry);
 
 -- Somme de l'argent du box office de tous les films pour chaque année
-SELECT annee, SUM(movieBoxOffice) AS boxOffice
-FROM Movies NATURAL JOIN Rating NATURAL JOIN Temps
+SELECT movieYear AS annee, SUM(movieBoxOffice) AS boxOffice
+FROM Movies
 WHERE movieBoxOffice IS NOT NULL
-GROUP BY GROUPING SETS (annee);
+GROUP BY GROUPING SETS (movieYear);
 
 
 -- Les 10 films ayant reçus les meilleurs ratings, par rapport à leur rang dans le box office
