@@ -8,7 +8,7 @@ FROM Rating
 -- Somme de l'argent du box office de tous les films pour chaque année
 SELECT annee, SUM(movieBoxOffice) AS boxOffice
 FROM Movies NATURAL JOIN Temps NATURAL JOIN Rating
-WHERE movieBoxOffice IS NOT NULL
+WHERE movieBoxOffice IS NOT NULL AND annee IS NOT NULL
 GROUP BY GROUPING SETS (annee);
 
 
@@ -24,4 +24,7 @@ FROM Movies NATURAL JOIN Temps NATURAL JOIN Rating
 WHERE rownum <= 20;
 
 --Le film ayant reçu la meilleure notation pour chaque année
-SELECT movieTitle, annee 
+SELECT movieTitle, annee, MAX(rating)
+FROM Movies NATURAL JOIN Rating NATURAL JOIN Temps
+WHERE annee IS NOT NULL
+GROUP BY GROUPING SETS (annee);
