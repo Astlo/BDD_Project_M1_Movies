@@ -1,3 +1,6 @@
+//g++ movies.cpp -o movies -lcurl
+//./movies movies.csv links.csv movies.sql
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -32,7 +35,7 @@ string imdbid(ifstream & links)
 	return id;
 }
 
-string recup(string imdbapi, int & i)
+string recupString(string imdbapi, int & i)
 {
 	string value = "";
 	while(imdbapi.at(i) != '\"')
@@ -57,6 +60,86 @@ string recup(string imdbapi, int & i)
 	return value;
 }
 
+string recupInt(string imdbapi, int & i)
+{
+	string value = "";
+	while(imdbapi.at(i) != '\"')
+	{
+		if(imdbapi.at(i) == ',')
+		{
+			//Ne rien faire
+		}
+		else
+		{	
+			value += imdbapi.at(i);
+		}
+		++i;
+	}
+
+	if (value == "" || value == "N/A")
+	{
+		value = "null";
+	}
+
+	return value;
+}
+
+string recupDollar(string imdbapi, int & i)
+{
+	string value = "";
+	if(imdbapi.at(i) == '$')
+	{
+		++i;
+	}
+	while(imdbapi.at(i) != '\"')
+	{
+		if(imdbapi.at(i) == ',')
+		{
+			//Ne rien faire
+		}
+		else
+		{
+			value += imdbapi.at(i);
+		}
+		++i;
+	}
+
+	if (value == "" || value == "N/A")
+	{
+		value = "null";
+	}
+
+	return value;
+}
+
+string recupDate(string imdbapi, int & i)
+{
+	string value = "to_date(\'";
+	while(imdbapi.at(i) != '\"')
+	{
+		
+		if(imdbapi.at(i) == ' ')
+		{
+			value += "-";
+		}
+		else
+		{
+			value += imdbapi.at(i);
+		}
+		++i;
+	}
+
+	if (value == "to_date(\'" || value == "N/A")
+	{
+		value = "null";
+	}
+	else
+	{ 
+		value += "\', \'DD-Mon-YY\')";
+	}
+
+	return value;
+}
 
 
 string extraction(string imdbapi)
@@ -79,77 +162,79 @@ string extraction(string imdbapi)
 
 			i = i+3;
 			if(key == "Year") {
-				donnee += recup(imdbapi, i);
+				donnee += recupInt(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Rated")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Released")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupDate(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Runtime")
 			{
-				donnee += recup(imdbapi, i);
+				string tmp;
+				tmp = recupInt(imdbapi, i);
+				donnee += tmp.substr(0, tmp.size()-4);
 				donnee += ",";
 			} 
 			else if(key == "Director")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			}
 			else if(key == "Actors")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Language")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Country")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Awards")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Metascore")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupInt(imdbapi, i);
 				donnee += ",";
 			} 
-			else if(key == "imdbrating")
+			else if(key == "imdbRating")
 			{				
-				donnee += recup(imdbapi, i);
+				donnee += recupInt(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "imdbVotes")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupInt(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "DVD")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupDate(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "BoxOffice")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupDollar(imdbapi, i);
 				donnee += ",";
 			} 
 			else if(key == "Production")
 			{
-				donnee += recup(imdbapi, i);
+				donnee += recupString(imdbapi, i);
 			}
 		}
 		i++;
@@ -163,7 +248,6 @@ int main(int argc, char const *argv[])
 	CURL *curl;
 	CURLcode res;
 	std::string readBuffer, URL;
-
 
 	ifstream lecture(argv[1], ios::in);
 	ifstream lecture2(argv[2], ios::in);
@@ -179,15 +263,20 @@ int main(int argc, char const *argv[])
 		getline(lecture,line);	
 		getline(lecture2,line);	
 		ecriture << insert;
+		lecture.get(caractere);
+		while(caractere != ',')
+		{
+			insertion += caractere;
+			lecture.get(caractere);
+		}
+		insertion += ',';
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\n')
+			if(caractere == '\r')
 			{
-				//insertion = insertion.substr(0, insertion.size()-1);
-				ecriture << insertion;
-
+				lecture.get(caractere); // saut \n			
+			
 				ecriture << insertion << "\',";
-
 
 				URL = "http://www.omdbapi.com/?apikey=b67cd4fd&i=tt";
 				URL += imdbid(lecture2);
