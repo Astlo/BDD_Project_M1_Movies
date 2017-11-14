@@ -1,5 +1,5 @@
-//g++ tags.cpp -o tags -lcurl
-//./tags tags.csv tags.sql
+//g++ faits_ratings.cpp -o ratings -lcurl
+//./ratings ratings.csv faits_ratings.sql
 
 #include <iostream>
 #include <fstream>
@@ -16,14 +16,12 @@ int main(int argc, char const *argv[])
 	string insert  = "INSERT INTO Rating Values(\'";
 	char caractere;
 	
-	if(lecture && lecture2 && ecriture)
+	if(lecture && ecriture)
 	{
 		string line ="";
 		string insertion="";
-		getline(lecture,line);	
-		getline(lecture2,line);	
+		getline(lecture,line);
 		ecriture << insert;
-		lecture.get(caractere);
 		while(lecture.get(caractere))
 		{
 			if(caractere == '\n')	//Si one saut de ligne est \n
