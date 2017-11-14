@@ -1,3 +1,6 @@
+//g++ movies.cpp -o movies -lcurl
+//./movies movies.csv links.csv movies.sql
+
 #include <iostream>
 #include <fstream>
 #include <string>
