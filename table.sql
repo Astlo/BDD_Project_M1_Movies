@@ -1,3 +1,20 @@
+prompt *************************************************************
+prompt ******************** DROP TABLE *****************************
+prompt *************************************************************
+
+DROP TABLE Table_Faits CASCADE CONSTRAINTS;
+DROP TABLE Temps CASCADE CONSTRAINTS;
+DROP TABLE Tags CASCADE CONSTRAINTS;
+DROP TABLE Movies CASCADE CONSTRAINTS;
+
+prompt ************************************************************
+prompt *********************** CREATE TABLE ***********************
+prompt ************************************************************
+
+prompt
+prompt ************************** Movies **************************
+prompt
+
 CREATE TABLE Movies
 (
 	movieId NUMBER NOT NULL,
@@ -21,7 +38,11 @@ CREATE TABLE Movies
 	PRIMARY KEY (movieId)
 );
 
-CREATE TABLE Tag
+prompt
+prompt *************************** Tags ***************************
+prompt
+
+CREATE TABLE Tags
 (
 	tagId NUMBER NOT NULL,
 	tag VARCHAR2(200) NOT NULL,
