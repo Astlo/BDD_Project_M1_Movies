@@ -7,9 +7,9 @@ GROUP BY (userTag)
 ORDER BY (moyenne);
 
 --GROUP BY CUBE : le nombre de films sortis en dvd par année, si des films n'ont pas de date de sortie on connaitra le nombre de fims qui ne sont pas sortis en dvd
-SELECT movieDVD, count(movieId)
+SELECT YEAR(movieDVD) as anneeDVD, movieCountry, count(movieId)
 FROM Movies
-GROUP BY CUBE (movieDVD,movieCountry);
+GROUP BY CUBE (anneeDVD, movieCountry);
 
 -- Somme de l'argent du box office de tous les films pour chaque année
 SELECT movieYear AS annee, SUM(movieBoxOffice) AS boxOffice
