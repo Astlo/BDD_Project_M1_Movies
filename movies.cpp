@@ -1,5 +1,5 @@
 //g++ movies.cpp -o movies -lcurl
-//./movies movies.csv links.csv movies.sql
+//./movies ml-latest/movies.csv ml-latest/links.csv movies.sql
 
 #include <iostream>
 #include <fstream>
@@ -272,9 +272,11 @@ int main(int argc, char const *argv[])
 		insertion += ',';
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\r')
+			if(caractere == '\n')	//Si one saut de ligne est \n
 			{
-				lecture.get(caractere); // saut \n			
+				//if(caractere == '\r') //Si one saut de ligne est \r\n
+				//{
+				//lecture.get(caractere); // saut \n			
 			
 				ecriture << insertion << "\',";
 
