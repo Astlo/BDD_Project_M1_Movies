@@ -83,7 +83,6 @@ CREATE TABLE Tagging
 	movieId NUMBER NOT NULL,
 	userTag VARCHAR2(200) NOT NULL,
 	colonne_timestamp NUMBER NOT NULL,
-	relevance NUMBER NOT NULL,
 	PRIMARY KEY (userId, movieId, userTag),
 	CONSTRAINT fk_Tagging_movieId FOREIGN KEY (movieId) REFERENCES Movies(movieId),
 	CONSTRAINT fk_Tagging_colonne_timestamp FOREIGN KEY (colonne_timestamp) REFERENCES Temps(colonne_timestamp)
