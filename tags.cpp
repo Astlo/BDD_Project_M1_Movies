@@ -16,12 +16,11 @@ int main(int argc, char const *argv[])
 	string insert  = "INSERT INTO Tags Values(\'";
 	char caractere;
 	
-	if(lecture && lecture2 && ecriture)
+	if(lecture && ecriture)
 	{
 		string line ="";
 		string insertion="";
-		getline(lecture,line);	
-		getline(lecture2,line);	
+		getline(lecture,line);
 		ecriture << insert;
 		lecture.get(caractere);
 		while(caractere != ',')
@@ -32,9 +31,11 @@ int main(int argc, char const *argv[])
 		insertion += ',';
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\r')
+			if(caractere == '\n')	//Si one saut de ligne est \n
 			{
-				lecture.get(caractere); // saut \n	
+				//if(caractere == '\r') //Si one saut de ligne est \r\n
+				//{
+				//lecture.get(caractere); // saut \n
 				ecriture << insertion;
 				
 				insertion = "";

@@ -34,9 +34,11 @@ int main(int argc, char const *argv[])
 		
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\r')
+			if(caractere == '\n')	//Si one saut de ligne est \n
 			{
-				lecture.get(caractere); // saut \n	
+				//if(caractere == '\r') //Si one saut de ligne est \r\n
+				//{
+				//lecture.get(caractere); // saut \n
 				ecriture << insertion;
 				
 				insertion = "";
