@@ -21,13 +21,13 @@ CREATE OR REPLACE TRIGGER tr_jour_mois_annee_maj
 AFTER INSERT ON Temps
 FOR EACH ROW
 DECLARE
-	temps number;
+	tannee number;
+	tmois number;
+	tjour number;
 BEGIN
-	--SELECT YEAR(‘2014-01-01’) into temps FROM Temps;
-	--SELECT extract(year from CAST(FROM_UNIXTIME(colonne_timestamp) as date2) as valeur_date) into temps FROM Temps;
-	--UPDATE Temps SET jour = 01, mois = 01, annee = temps;
-	SELECT colonne_timestamp, 
-  FROM_UNIXTIME(colonne_timestamp) as valeur_datetime
-FROM Temps;
+	SELECT EXTRACT(YEAR FROM :new.colonne_timestamp) into tannee FROM Temps;
+	SELECT EXTRACT(MONTH FROM :new.colonne_timestamp) into tmois FROM Temps;
+	SELECT EXTRACT(DAY FROM :new.colonne_timestamp) into tjour FROM Temps;
+	UPDATE Temps SET jour = tjour, mois = tmois, annee = tannee;
 END;
 /
