@@ -5,7 +5,6 @@ prompt ******************** DROP TABLE *****************************
 prompt *************************************************************
 
 DROP TABLE Movies CASCADE CONSTRAINT;
-DROP TABLE Tag CASCADE CONSTRAINT;
 DROP TABLE Temps CASCADE CONSTRAINT;
 DROP TABLE Rating CASCADE CONSTRAINT;
 DROP TABLE Tagging CASCADE CONSTRAINT;
