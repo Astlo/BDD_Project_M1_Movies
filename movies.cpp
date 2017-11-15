@@ -289,10 +289,10 @@ int main(int argc, char const *argv[])
 		insertion += '\'';
 		while(lecture.get(caractere))
 		{
-			//if(caractere == '\n')	//Si one saut de ligne est \n
+			//if(caractere == '\n')	//Si le saut de ligne est \n
 			//{
-				if(caractere == '\r') //Si one saut de ligne est \r\n
-				{
+			if(caractere == '\r') //Si le saut de ligne est \r\n
+			{
 				lecture.get(caractere); // saut \n			
 			
 				ecriture << insertion << "\',";

@@ -24,21 +24,17 @@ int main(int argc, char const *argv[])
 		ecriture << insert;
 		while(lecture.get(caractere))
 		{
-			if(caractere == '\n')	//Si one saut de ligne est \n
+			//if(caractere == '\n')	//Si one saut de ligne est \n
+			//{
+			if(caractere == '\r') //Si one saut de ligne est \r\n
 			{
-				//if(caractere == '\r') //Si one saut de ligne est \r\n
-				//{
-				//lecture.get(caractere); // saut \n
+				lecture.get(caractere); // saut \n
+				
 				ecriture << insertion;
 				
 				insertion = "";
 				ecriture << "\');" << "\n";
 				insertion += insert;
-			}
-			else if(caractere == '\'')
-			{
-				insertion += '\\';
-				insertion += caractere;
 			}
 			else
 			{
